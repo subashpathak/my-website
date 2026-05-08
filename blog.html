@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Personal Website</title>
+    <title>Blog - My Personal Website</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header>
-        <h1>Welcome to My Site</h1>
+        <h1>Blog</h1>
         <nav>
             <ul>
-                <li><a href="#about">About</a></li>
-                <li><a href="#projects">Projects</a></li>
+                <li><a href="index.html">Home</a></li>
                 <li><a href="blog.html">Blog</a></li>
                 <li><a href="services.html">Services</a></li>
             </ul>
@@ -20,9 +19,12 @@
     </header>
 
     <main>
-        <section id="about">
-            <h2>About Me</h2>
-            <p>This site is hosted on GitHub and deployed via Netlify.</p>
+        <section id="blog-posts">
+            <h2>Latest Posts</h2>
+            <input type="text" id="search-input" onkeyup="search()" placeholder="Search for posts..">
+            <ul id="post-list">
+                <li><a href="blog/2024-05-07-my-first-post.html">My First Post</a></li>
+            </ul>
         </section>
     </main>
 
