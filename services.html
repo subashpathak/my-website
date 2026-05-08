@@ -3,33 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Services - My Personal Website</title>
+    <title>Services - Subash Pathak</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header>
-        <h1>Services</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="blog.html">Blog</a></li>
-                <li><a href="services.html">Services</a></li>
-            </ul>
-        </nav>
+        <div class="container">
+            <div id="branding">
+                <h1><a href="index.html">Subash Pathak</a></h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html#about">About</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
-    <main>
+    <main class="container">
         <section id="services-list">
             <h2>Our Services</h2>
-            <ul>
-                <li>Web Design</li>
-                <li>Web Development</li>
-                <li>SEO</li>
-            </ul>
+            <div class="service">
+                <h3>AI Clinical Automation Tool</h3>
+                <p><strong>Coming Soon!</strong> An intelligent tool designed to automate repetitive tasks, streamline clinical workflows, and reduce administrative burden. This tool will help clinicians to save time and focus on patient care.</p>
+                <p>Subscribe to our newsletter to get notified when it's released!</p>
+            </div>
+            <div class="service">
+                <h3>Consulting</h3>
+                <p>I provide consulting services for healthcare organizations looking to leverage AI and technology to improve their clinical workflows. I can help you to identify areas for improvement, develop a strategy, and implement solutions.</p>
+            </div>
         </section>
         <section id="contact">
-            <h2>Contact Us</h2>
-            <form action="mailto:youremail@example.com" method="post" enctype="text/plain">
+            <h2>Contact Me</h2>
+            <p>If you have any questions or would like to discuss a project, please feel free to contact me.</p>
+            <form action="mailto:subash.pathak@example.com" method="post" enctype="text/plain">
                 <label for="name">Name:</label><br>
                 <input type="text" id="name" name="name"><br>
                 <label for="email">Email:</label><br>
@@ -44,7 +53,7 @@
     <script src="js/script.js"></script>
     <button id="back-to-top-btn">Back to Top</button>
     <footer>
-        <p>&copy; 2024 My Personal Website</p>
+        <p>&copy; 2024 Subash Pathak</p>
         <p>
             <a href="#">Facebook</a> |
             <a href="#">Twitter</a> |
