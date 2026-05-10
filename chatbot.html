@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant - TrialsAndStats</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .chat-container {
+            height: calc(100vh - 200px);
+            max-height: 600px;
+        }
+
+        .message {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 8px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #64748b;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typing {
+            0%, 80%, 100% {
+                transform: scale(0);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-teal-600 rounded-lg flex items-center justify-center shadow-lg shadow-teal-200">
+                        <i class="fas fa-microscope text-white"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-bold tracking-tight text-slate-900 leading-none block">TrialsAndStats</span>
+                        <span class="text-xs text-slate-500">AI Assistant</span>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-600">
+                    <a href="index.html" class="hover:text-teal-600 transition">Home</a>
+                    <a href="#" class="text-teal-600">AI Assistant</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-4xl mx-auto p-4 pt-8">
+        <div class="glass-card rounded-2xl shadow-xl overflow-hidden">
+            <div class="bg-gradient-to-r from-teal-600 to-blue-600 p-6 text-white">
+                <h1 class="text-2xl font-bold mb-2">AI Assistant</h1>
+                <p class="text-teal-100">Ask me anything about clinical trials, biostatistics, or our automation tools.</p>
+            </div>
+
+            <div class="chat-container overflow-y-auto p-6 space-y-4" id="chatContainer">
+                <div class="message flex items-start gap-3">
+                    <div class="w-8 h-8 bg-teal-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-robot text-white text-sm"></i>
+                    </div>
+                    <div class="bg-white rounded-lg p-4 shadow-sm border max-w-md">
+                        <p class="text-slate-700">Hello! I'm your AI assistant for TrialsAndStats. I can help you with questions about clinical trials, biostatistics, regulatory compliance, and our automation tools. How can I assist you today?</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-slate-200 p-4">
+                <div class="flex gap-4">
+                    <input 
+                        type="text" 
+                        id="messageInput"
+                        placeholder="Ask me about clinical trials, biostatistics, or our tools..."
+                        class="flex-1 px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
+                    >
+                    <button 
+                        id="sendButton"
+                        class="bg-teal-600 text-white px-6 py-3 rounded-lg hover:bg-teal-700 transition font-medium flex items-center gap-2"
+                    >
+                        <i class="fas fa-paper-plane"></i>
+                        Send
+                    </button>
+                </div>
+                <div class="mt-3 text-xs text-slate-500 flex items-center gap-2">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Powered by Google Gemini - Your conversations are secure and confidential</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <button class="suggestion-btn glass-card p-4 rounded-lg text-left hover:bg-white/80 transition">
+                <i class="fas fa-flask text-teal-600 mb-2"></i>
+                <h3 class="font-semibold text-slate-900 mb-1">Clinical Trial Design</h3>
+                <p class="text-sm text-slate-600">Help with study protocols and statistical planning</p>
+            </button>
+            <button class="suggestion-btn glass-card p-4 rounded-lg text-left hover:bg-white/80 transition">
+                <i class="fas fa-chart-bar text-blue-600 mb-2"></i>
+                <h3 class="font-semibold text-slate-900 mb-1">Statistical Analysis</h3>
+                <p class="text-sm text-slate-600">Guidance on biostatistical methods and interpretation</p>
+            </button>
+            <button class="suggestion-btn glass-card p-4 rounded-lg text-left hover:bg-white/80 transition">
+                <i class="fas fa-cogs text-purple-600 mb-2"></i>
+                <h3 class="font-semibold text-slate-900 mb-1">Automation Tools</h3>
+                <p class="text-sm text-slate-600">Learn about our SDTM mapping and audit tools</p>
+            </button>
+        </div>
+    </div>
+
+    <script src="js/chatbot.js"></script>
+</body>
+</html>
