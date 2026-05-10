@@ -7,7 +7,7 @@ class ChatBot {
         
         // You'll need to get your Google AI Studio API key from https://aistudio.google.com/
         // For security, consider using environment variables or a backend proxy
-        this.apiKey = 'AIzaSyC6c0kWVTAbt1iWhjhKsQWGQiJB0VHUwGI';
+        this.apiKey = 'AIzaSyBxafWasrcK_QKlxt2zrelMw16sZcz93Lw';
         this.apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${this.apiKey}`;
         
         this.systemPrompt = `You are an AI assistant for TrialsAndStats, a company specializing in biostatistical services and clinical automation tools. 
