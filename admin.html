@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Inbox | AI Catalyst</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-950 text-slate-200 antialiased min-h-screen flex flex-col">
+
+    <!-- Navigation -->
+    <nav class="w-full glass-nav border-b border-slate-800/50 p-4">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <a href="index.html" class="font-bold flex items-center gap-2 text-white hover:text-brand-400 transition-colors">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+            <span class="font-bold text-brand-400"><i class="fas fa-inbox mr-2"></i>Admin Inbox</span>
+        </div>
+    </nav>
+
+    <main class="flex-grow max-w-6xl w-full mx-auto p-4 flex items-center justify-center">
+        <!-- Login Section -->
+        <div id="login-section" class="glass-panel p-8 rounded-3xl border border-slate-800 w-full max-w-md">
+            <h2 class="text-2xl font-bold text-white mb-6 text-center">Admin Login</h2>
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-300 mb-2">Password</label>
+                    <input type="password" id="admin-password" class="w-full p-3 rounded-xl bg-slate-900/50 border border-slate-700 text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500" required>
+                </div>
+                <button type="submit" class="w-full bg-brand-600 text-white py-3 rounded-xl font-bold hover:bg-brand-500 transition-colors">Login</button>
+            </form>
+            <p id="login-error" class="text-red-400 text-sm mt-4 text-center hidden">Incorrect password.</p>
+        </div>
+
+        <!-- Inbox Section -->
+        <div id="inbox-section" class="w-full hidden flex-col h-[80vh]">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-white">Messages</h2>
+                <button id="refresh-btn" class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-lg border border-slate-700 transition-colors">
+                    <i class="fas fa-sync-alt mr-2"></i>Refresh
+                </button>
+            </div>
+            
+            <div class="glass-panel rounded-3xl border border-slate-800 flex-grow overflow-hidden flex flex-col">
+                <div class="overflow-y-auto p-0 flex-grow">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-slate-900/80 sticky top-0 border-b border-slate-800 z-10">
+                            <tr>
+                                <th class="p-4 font-semibold text-slate-300">Date</th>
+                                <th class="p-4 font-semibold text-slate-300">Email</th>
+                                <th class="p-4 font-semibold text-slate-300">Message</th>
+                            </tr>
+                        </thead>
+                        <tbody id="messages-tbody" class="divide-y divide-slate-800/50">
+                            <!-- Messages will be populated here -->
+                        </tbody>
+                    </table>
+                    <div id="empty-state" class="hidden p-12 text-center text-slate-500 flex-col items-center justify-center">
+                        <i class="fas fa-inbox text-4xl mb-4 opacity-50"></i>
+                        <p>No messages yet.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const loginForm = document.getElementById('login-form');
+        const passwordInput = document.getElementById('admin-password');
+        const loginSection = document.getElementById('login-section');
+        const inboxSection = document.getElementById('inbox-section');
+        const loginError = document.getElementById('login-error');
+        const messagesTbody = document.getElementById('messages-tbody');
+        const emptyState = document.getElementById('empty-state');
+        const refreshBtn = document.getElementById('refresh-btn');
+
+        let authToken = '';
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const pwd = passwordInput.value;
+            await loadMessages(pwd);
+        });
+
+        refreshBtn.addEventListener('click', () => {
+            loadMessages(authToken);
+        });
+
+        async function loadMessages(password) {
+            try {
+                const response = await fetch('/api/messages', {
+                    headers: {
+                        'Authorization': `Bearer ${password}`
+                    }
+                });
+
+                if (response.ok) {
+                    authToken = password;
+                    const messages = await response.json();
+                    
+                    loginSection.classList.add('hidden');
+                    inboxSection.classList.remove('hidden');
+                    inboxSection.classList.add('flex');
+                    
+                    renderMessages(messages);
+                } else {
+                    loginError.classList.remove('hidden');
+                }
+            } catch (err) {
+                console.error("Error fetching messages", err);
+                loginError.textContent = "Network error connecting to server.";
+                loginError.classList.remove('hidden');
+            }
+        }
+
+        function renderMessages(messages) {
+            messagesTbody.innerHTML = '';
+            
+            if (messages.length === 0) {
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+            } else {
+                emptyState.classList.add('hidden');
+                emptyState.classList.remove('flex');
+                
+                messages.forEach(msg => {
+                    const date = new Date(msg.created_at).toLocaleString();
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-800/30 transition-colors';
+                    tr.innerHTML = `
+                        <td class="p-4 whitespace-nowrap text-sm text-slate-400 align-top">${date}</td>
+                        <td class="p-4 font-medium text-brand-300 align-top"><a href="mailto:${msg.email}" class="hover:underline">${msg.email}</a></td>
+                        <td class="p-4 text-slate-300 whitespace-pre-wrap">${msg.message}</td>
+                    `;
+                    messagesTbody.appendChild(tr);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

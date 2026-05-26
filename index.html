@@ -242,11 +242,11 @@
             <form id="contact-form" class="space-y-6 glass-panel p-8 md:p-12 rounded-3xl border border-slate-800 text-left">
                 <div>
                     <label class="block text-sm font-medium text-slate-300 mb-2">Your Email</label>
-                    <input type="email" placeholder="hello@yourbusiness.com" class="w-full p-4 rounded-xl bg-slate-900/50 border border-slate-700 text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-colors" required>
+                    <input type="email" id="contact-email" placeholder="hello@yourbusiness.com" class="w-full p-4 rounded-xl bg-slate-900/50 border border-slate-700 text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-colors" required>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-slate-300 mb-2">How can I help?</label>
-                    <textarea placeholder="e.g. I spend 5 hours a week copy-pasting customer info from emails to my spreadsheet..." class="w-full p-4 rounded-xl bg-slate-900/50 border border-slate-700 text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 min-h-[160px] resize-y transition-colors" required></textarea>
+                    <textarea id="contact-msg" placeholder="e.g. I spend 5 hours a week copy-pasting customer info from emails to my spreadsheet..." class="w-full p-4 rounded-xl bg-slate-900/50 border border-slate-700 text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 min-h-[160px] resize-y transition-colors" required></textarea>
                 </div>
                 <button type="submit" class="w-full bg-brand-600 text-white py-4 rounded-xl font-bold shadow-lg shadow-brand-500/25 hover:bg-brand-500 transition-colors flex justify-center items-center gap-2">
                     <span>Send Message</span>
@@ -264,5 +264,49 @@
     </footer>
 
     <script src="js/script.js"></script>
+    <script>
+        const contactForm = document.getElementById('contact-form');
+        if(contactForm) {
+            contactForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('contact-email').value;
+                const message = document.getElementById('contact-msg').value;
+                const btn = contactForm.querySelector('button');
+                const originalText = btn.innerHTML;
+                
+                btn.innerHTML = '<span>Sending...</span><i class="fas fa-spinner fa-spin text-sm"></i>';
+                btn.disabled = true;
+
+                try {
+                    const res = await fetch('/api/contact', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, message })
+                    });
+                    
+                    if(res.ok) {
+                        btn.innerHTML = '<span>Message Sent!</span><i class="fas fa-check text-sm"></i>';
+                        btn.classList.replace('bg-brand-600', 'bg-green-600');
+                        contactForm.reset();
+                        setTimeout(() => {
+                            btn.innerHTML = originalText;
+                            btn.disabled = false;
+                            btn.classList.replace('bg-green-600', 'bg-brand-600');
+                        }, 3000);
+                    } else {
+                        throw new Error("Server returned error");
+                    }
+                } catch (err) {
+                    btn.innerHTML = '<span>Error</span><i class="fas fa-times text-sm"></i>';
+                    btn.classList.replace('bg-brand-600', 'bg-red-600');
+                    setTimeout(() => {
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                        btn.classList.replace('bg-red-600', 'bg-brand-600');
+                    }, 3000);
+                }
+            });
+        }
+    </script>
 </body>
 </html>
