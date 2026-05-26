@@ -3,10 +3,12 @@ const bodyParser = require('body-parser');
 const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs').promises;
+const cors = require('cors');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.use(cors());
 app.use(bodyParser.json());
 
 const MESSAGES_FILE = path.join(__dirname, 'messages.json');

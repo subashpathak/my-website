@@ -90,7 +90,7 @@
 
         async function loadMessages(password) {
             try {
-                const response = await fetch('/api/messages', {
+                const response = await fetch('https://my-website-3syr.onrender.com/api/messages', {
                     headers: {
                         'Authorization': `Bearer ${password}`
                     }
