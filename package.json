@@ -20,8 +20,7 @@
   "homepage": "https://github.com/subashpathak/my-website#readme",
   "dependencies": {
     "body-parser": "^2.2.2",
-    "express": "^5.2.1",
-    "sqlite3": "^6.0.1"
+    "express": "^5.2.1"
   },
   "engines": {
     "node": "22.x"

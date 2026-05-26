@@ -2,64 +2,76 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { spawn } = require('child_process');
 const path = require('path');
-const sqlite3 = require('sqlite3').verbose();
+const fs = require('fs').promises;
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 
-// Initialize SQLite database
-const db = new sqlite3.Database('./messages.db', (err) => {
-    if (err) {
-        console.error('Error opening database', err.message);
-    } else {
-        db.run(`CREATE TABLE IF NOT EXISTS messages (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            email TEXT,
-            message TEXT,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )`);
+const MESSAGES_FILE = path.join(__dirname, 'messages.json');
+
+// Initialize JSON database
+async function initDb() {
+    try {
+        await fs.access(MESSAGES_FILE);
+    } catch {
+        await fs.writeFile(MESSAGES_FILE, JSON.stringify([]));
     }
-});
+}
+initDb();
 
 // Serve static files
 app.use(express.static(__dirname, {
     index: ['index.html']
 }));
 
-app.post('/api/contact', (req, res) => {
+app.post('/api/contact', async (req, res) => {
     const { email, message } = req.body;
     if (!email || !message) {
         return res.status(400).json({ error: 'Email and message are required' });
     }
 
-    const stmt = db.prepare('INSERT INTO messages (email, message) VALUES (?, ?)');
-    stmt.run([email, message], function(err) {
-        if (err) {
-            console.error(err);
-            return res.status(500).json({ error: 'Database error' });
-        }
-        res.json({ success: true, id: this.lastID });
-    });
-    stmt.finalize();
+    try {
+        const fileData = await fs.readFile(MESSAGES_FILE, 'utf-8');
+        const messages = JSON.parse(fileData);
+        
+        const newMessage = {
+            id: Date.now(),
+            email,
+            message,
+            created_at: new Date().toISOString()
+        };
+        
+        messages.push(newMessage);
+        await fs.writeFile(MESSAGES_FILE, JSON.stringify(messages, null, 2));
+        
+        res.json({ success: true, id: newMessage.id });
+    } catch (err) {
+        console.error('Error saving message:', err);
+        res.status(500).json({ error: 'Database error' });
+    }
 });
 
 // A simple hardcoded admin password for demo purposes
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
 
-app.get('/api/messages', (req, res) => {
+app.get('/api/messages', async (req, res) => {
     const authHeader = req.headers.authorization;
     if (authHeader !== `Bearer ${ADMIN_PASSWORD}`) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    db.all('SELECT * FROM messages ORDER BY created_at DESC', [], (err, rows) => {
-        if (err) {
-            return res.status(500).json({ error: 'Database error' });
-        }
-        res.json(rows);
-    });
+    try {
+        const fileData = await fs.readFile(MESSAGES_FILE, 'utf-8');
+        let messages = JSON.parse(fileData);
+        // Sort descending by created_at
+        messages.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        res.json(messages);
+    } catch (err) {
+        console.error('Error reading messages:', err);
+        res.status(500).json({ error: 'Database error' });
+    }
 });
 
 app.post('/api/chat', (req, res) => {
