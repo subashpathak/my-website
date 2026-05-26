@@ -74,42 +74,61 @@ app.get('/api/messages', async (req, res) => {
     }
 });
 
-app.post('/api/chat', (req, res) => {
+
+app.post('/api/chat', async (req, res) => {
     const userMessage = req.body.message;
+    if (!userMessage) return res.status(400).json({ error: 'Message is required' });
 
-    if (!userMessage) {
-        return res.status(400).json({ error: 'Message is required' });
+    const systemPrompt = "You are a helpful AI business assistant. You help small business owners understand how AI and automation can save them time and money. Be concise, friendly, and practical. Do not use overly complex jargon.";
+    const groqApiKey = process.env.GROQ_API_KEY;
+
+    try {
+        if (groqApiKey) {
+            // Production: Groq
+            const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${groqApiKey}`
+                },
+                body: JSON.stringify({
+                    model: "llama3-8b-8192",
+                    messages: [
+                        { role: "system", content: systemPrompt },
+                        { role: "user", content: userMessage }
+                    ],
+                    temperature: 0.7,
+                    max_tokens: 1024
+                })
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                console.error("Groq API Error:", data);
+                return res.status(500).json({ error: "Groq API error: " + (data.error?.message || "Unknown error") });
+            }
+            res.json({ response: data.choices[0].message.content });
+        } else {
+            // Development: Local Ollama
+            const response = await fetch("http://localhost:11434/api/generate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    model: "llama3:latest",
+                    prompt: `${systemPrompt}\n\nUser: ${userMessage}\nAI:`,
+                    stream: false
+                })
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                console.error("Ollama Error:", data);
+                return res.status(500).json({ error: "Local Ollama error" });
+            }
+            res.json({ response: data.response });
+        }
+    } catch (err) {
+        console.error("Chat API fetch error:", err);
+        res.status(500).json({ error: "Failed to communicate with AI model: " + err.message });
     }
-
-    // Call the python script as per project rules for AI logic
-    const pyScript = path.join(__dirname, 'scripts', 'chatbot.py');
-    const pythonProcess = spawn('python3', [pyScript, userMessage]);
-
-    let dataString = '';
-    let errorString = '';
-
-    pythonProcess.stdout.on('data', (data) => {
-        dataString += data.toString();
-    });
-
-    pythonProcess.stderr.on('data', (data) => {
-        errorString += data.toString();
-    });
-
-    pythonProcess.on('close', (code) => {
-        if (code !== 0) {
-            console.error(`Python script exited with code ${code}. Error: ${errorString}`);
-            return res.status(500).json({ error: 'Failed to process chat message' });
-        }
-        
-        try {
-            const result = JSON.parse(dataString);
-            res.json({ response: result.response });
-        } catch (err) {
-            console.error('Failed to parse Python output:', dataString);
-            res.status(500).json({ error: 'Invalid response from AI model' });
-        }
-    });
 });
 
 app.listen(port, '0.0.0.0', () => {
