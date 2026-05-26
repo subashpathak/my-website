@@ -66,18 +66,53 @@
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        chatForm.addEventListener('submit', (e) => {
+        chatForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const text = userInput.value.trim();
             if (!text) return;
 
             addMessage(text, true);
             userInput.value = '';
+            
+            // Add loading indicator
+            const loadingId = 'loading-' + Date.now();
+            const loadingDiv = document.createElement('div');
+            loadingDiv.id = loadingId;
+            loadingDiv.className = 'flex gap-3';
+            loadingDiv.innerHTML = `
+                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-robot text-white text-xs"></i>
+                </div>
+                <div class="bg-slate-100 p-4 rounded-2xl rounded-tl-none max-w-[80%] text-slate-500 italic">
+                    AI is typing...
+                </div>
+            `;
+            chatBox.appendChild(loadingDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
 
-            // Simulated response
-            setTimeout(() => {
-                addMessage("That sounds like a great candidate for automation. I can help you build a custom solution for that. Would you like to book a call to discuss the specifics?");
-            }, 1000);
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: text })
+                });
+                
+                const data = await response.json();
+                
+                // Remove loading indicator
+                document.getElementById(loadingId).remove();
+                
+                if (data.error) {
+                    addMessage("Sorry, I encountered an error: " + data.error);
+                } else {
+                    addMessage(data.response);
+                }
+            } catch (err) {
+                document.getElementById(loadingId).remove();
+                addMessage("Sorry, there was a network error. Please ensure the server is running.");
+            }
         });
     </script>
 </body>
