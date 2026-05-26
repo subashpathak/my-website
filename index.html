@@ -1,81 +1,268 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Engineer | Small Business Solutions</title>
+    <title>AI Solutions | Freelance AI Engineer for Small Businesses</title>
+    
+    <meta name="description" content="Affordable AI services for small businesses. Custom chatbots, workflow automation, prompt engineering, and data organization.">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            400: '#9f7aea',
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+    </style>
 </head>
-<body>
-    <header>
-        <nav>
-            <div class="logo">AI Solutions</div>
-            <ul>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#rates">Rates</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
+<body class="bg-slate-950 text-slate-200 antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full top-0 z-50 glass-nav border-b border-slate-800/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center gap-3 group cursor-pointer">
+                    <div class="w-10 h-10 bg-gradient-to-br from-brand-400 to-brand-600 rounded-xl flex items-center justify-center shadow-lg shadow-brand-500/30 group-hover:shadow-brand-500/50 transition-all duration-300">
+                        <i class="fas fa-sparkles text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-bold tracking-tight text-white block bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">AI Catalyst</span>
+                    </div>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
+                    <a href="#services" class="hover:text-white hover:-translate-y-0.5 transition-all duration-200">Services</a>
+                    <a href="#rates" class="hover:text-white hover:-translate-y-0.5 transition-all duration-200">Pricing</a>
+                    <a href="#contact" class="hover:text-white hover:-translate-y-0.5 transition-all duration-200">Contact</a>
+                    <a href="chatbot.html" class="relative group px-6 py-2.5 rounded-full bg-slate-800 text-white hover:bg-slate-700 transition-all duration-300 overflow-hidden border border-slate-700">
+                        <span class="relative z-10 flex items-center gap-2">
+                            <i class="fas fa-robot text-brand-400"></i> Try Demo Bot
+                        </span>
+                        <div class="absolute inset-0 h-full w-full bg-gradient-to-r from-brand-600 to-brand-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden border-b border-slate-800/50">
+        <!-- Background Elements -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[500px] opacity-20 pointer-events-none">
+            <div class="absolute inset-0 bg-gradient-to-b from-brand-500/40 to-transparent blur-3xl rounded-full mix-blend-screen animate-pulse-slow"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-800/80 border border-slate-700/50 text-brand-400 text-sm font-medium mb-8 backdrop-blur-sm">
+                <span class="relative flex h-2 w-2">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
+                </span>
+                Available for contract work
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-extrabold text-white mb-6 leading-[1.1] tracking-tight">
+                Practical AI Solutions <br />
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-brand-400 via-brand-500 to-indigo-400">
+                    for Small Businesses.
+                </span>
+            </h1>
+            
+            <p class="text-lg md:text-xl text-slate-400 mb-10 leading-relaxed max-w-2xl mx-auto font-light">
+                Hi, I'm a freelance AI Engineer dedicated to helping local businesses save hours of manual work every week. Simple setups, affordable rates, and real results.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="#contact" class="group relative px-8 py-4 rounded-full font-semibold text-white bg-brand-600 overflow-hidden shadow-[0_0_40px_rgba(139,92,246,0.3)] hover:shadow-[0_0_60px_rgba(139,92,246,0.5)] transition-all duration-300 hover:-translate-y-1">
+                    <span class="relative z-10">Get a Free Consultation</span>
+                    <div class="absolute inset-0 h-full w-full bg-gradient-to-r from-brand-500 to-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </a>
+                <a href="#services" class="px-8 py-4 rounded-full font-semibold text-slate-300 hover:text-white hover:bg-slate-800/50 transition-all duration-300">
+                    See what I can do &rarr;
+                </a>
+            </div>
+        </div>
     </header>
 
-    <main>
-        <section class="hero">
-            <h1>Practical AI for Small Business</h1>
-            <p>I build custom AI solutions that automate your grunt work, so you can focus on growing your business. No jargon. No hype. Just results.</p>
-            <a href="#contact" class="cta-button">Get a Free Audit</a>
-        </section>
+    <!-- Services Section -->
+    <section id="services" class="py-24 md:py-32 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20">
+                <h2 class="text-brand-400 font-semibold tracking-wider uppercase text-sm mb-3">My Services</h2>
+                <h3 class="text-3xl md:text-5xl font-bold text-white">How I can help you scale</h3>
+            </div>
 
-        <section id="services" class="services">
-            <h2>How I Help</h2>
-            <div class="service-grid">
-                <div class="service-card">
-                    <h3>AI Strategy & Audits</h3>
-                    <p>Identify the high-impact areas where AI can save your business 10+ hours a week.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Service 1 -->
+                <div class="service-card group glass-panel p-8 rounded-3xl border border-slate-800 hover:border-brand-500/50 transition-all duration-300 relative overflow-hidden h-full">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-brand-500/10 rounded-full blur-2xl -mr-16 -mt-16 group-hover:bg-brand-500/20 transition-all duration-500"></div>
+                    <div class="w-14 h-14 bg-slate-800/80 rounded-2xl flex items-center justify-center mb-6 border border-slate-700/50 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+                        <i class="fas fa-robot text-2xl text-brand-400"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Smart Chatbots</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        I build simple customer support bots for your website that can answer common questions 24/7, freeing up your phone lines.
+                    </p>
                 </div>
-                <div class="service-card">
-                    <h3>Custom Chatbots</h3>
-                    <p>Support your customers 24/7 with bots that understand your specific products and services.</p>
+
+                <!-- Service 2 -->
+                <div class="service-card group glass-panel p-8 rounded-3xl border border-slate-800 hover:border-brand-500/50 transition-all duration-300 relative overflow-hidden h-full">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl -mr-16 -mt-16 group-hover:bg-indigo-500/20 transition-all duration-500"></div>
+                    <div class="w-14 h-14 bg-slate-800/80 rounded-2xl flex items-center justify-center mb-6 border border-slate-700/50 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+                        <i class="fas fa-network-wired text-2xl text-indigo-400"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Workflow Automation</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Using Zapier or Make, I connect your emails, CRM, and spreadsheets so data flows automatically without manual entry.
+                    </p>
                 </div>
-                <div class="service-card">
-                    <h3>Process Automation</h3>
-                    <p>Connect your tools and automate repetitive tasks like data entry, scheduling, and invoicing.</p>
+
+                <!-- Service 3 -->
+                <div class="service-card group glass-panel p-8 rounded-3xl border border-slate-800 hover:border-brand-500/50 transition-all duration-300 relative overflow-hidden h-full">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-fuchsia-500/10 rounded-full blur-2xl -mr-16 -mt-16 group-hover:bg-fuchsia-500/20 transition-all duration-500"></div>
+                    <div class="w-14 h-14 bg-slate-800/80 rounded-2xl flex items-center justify-center mb-6 border border-slate-700/50 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-300">
+                        <i class="fas fa-magic text-2xl text-fuchsia-400"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Custom AI Prompts</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        I craft specific ChatGPT prompts and instructions tailored to your business for drafting emails, creating content, or summarizing notes.
+                    </p>
                 </div>
-                <div class="service-card">
-                    <h3>Data Intelligence</h3>
-                    <p>Turn your spreadsheets into actionable insights for sales forecasting and inventory management.</p>
+
+                <!-- Service 4 -->
+                <div class="service-card group glass-panel p-8 rounded-3xl border border-slate-800 hover:border-brand-500/50 transition-all duration-300 relative overflow-hidden h-full">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl -mr-16 -mt-16 group-hover:bg-blue-500/20 transition-all duration-500"></div>
+                    <div class="w-14 h-14 bg-slate-800/80 rounded-2xl flex items-center justify-center mb-6 border border-slate-700/50 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-300">
+                        <i class="fas fa-database text-2xl text-blue-400"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Data Organization</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        I can clean up messy spreadsheets, extract information from PDFs, and organize your business data so it actually makes sense.
+                    </p>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section id="rates" class="rates">
-            <h2>Transparent Pricing</h2>
-            <p class="rate-sub">No hidden fees. Just clear, value-driven engineering.</p>
-            <div class="price-box">
-                <span class="price">$175</span>
-                <span class="per-hour">/ hour</span>
-                <p>Typical projects range from 10-40 hours.</p>
-                <p><em>Flat-fee project rates available upon request.</em></p>
+    <!-- Pricing Section -->
+    <section id="rates" class="py-24 md:py-32 bg-slate-900 border-y border-slate-800">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-5xl font-bold text-white mb-6">Beginner-Friendly Pricing</h2>
+            <p class="text-slate-400 mb-16 text-lg max-w-2xl mx-auto">Because small businesses shouldn't need a huge enterprise budget to benefit from AI.</p>
+            
+            <div class="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+                <!-- Hourly Rate -->
+                <div class="glass-panel p-10 rounded-[2rem] border border-slate-700 hover:border-brand-500/50 transition-all duration-300 relative text-left">
+                    <div class="text-sm font-semibold text-brand-400 uppercase tracking-wider mb-2">Hourly Rate</div>
+                    <div class="text-5xl font-black text-white mb-2">$50<span class="text-xl font-medium text-slate-500">/hr</span></div>
+                    <p class="text-slate-400 mb-8 pb-8 border-b border-slate-800">Perfect for quick tasks, consultations, and small automations.</p>
+                    
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-brand-400 mt-1"></i>
+                            <span class="text-slate-300 text-sm">Pay only for the hours worked</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-brand-400 mt-1"></i>
+                            <span class="text-slate-300 text-sm">Clear time estimates upfront</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-brand-400 mt-1"></i>
+                            <span class="text-slate-300 text-sm">No long-term commitments</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Project Rate -->
+                <div class="glass-panel p-10 rounded-[2rem] border border-brand-500/30 relative text-left bg-gradient-to-b from-brand-900/20 to-transparent">
+                    <div class="absolute top-0 right-8 -translate-y-1/2 bg-brand-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide shadow-lg">Most Popular</div>
+                    <div class="text-sm font-semibold text-brand-400 uppercase tracking-wider mb-2">Project Based</div>
+                    <div class="text-5xl font-black text-white mb-2">Fixed<span class="text-xl font-medium text-slate-500"> Rates</span></div>
+                    <p class="text-slate-400 mb-8 pb-8 border-b border-slate-800">Ideal for full chatbot setups or complete workflow automations.</p>
+                    
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-brand-400 mt-1"></i>
+                            <span class="text-slate-300 text-sm">Predictable total cost (e.g. $300-$500)</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-brand-400 mt-1"></i>
+                            <span class="text-slate-300 text-sm">Includes setup and testing</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-brand-400 mt-1"></i>
+                            <span class="text-slate-300 text-sm">1 week of post-launch support</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </section>
+            
+            <div class="mt-12">
+                <a href="#contact" class="inline-flex items-center justify-center px-8 py-4 rounded-full font-semibold text-white bg-slate-800 hover:bg-slate-700 transition-colors border border-slate-700">
+                    Let's discuss your project
+                </a>
+            </div>
+        </div>
+    </section>
 
-        <section id="contact" class="contact">
-            <h2>Ready to Automate?</h2>
-            <p>Let's discuss how AI can transform your workflow.</p>
-            <form id="contact-form">
-                <input type="email" placeholder="Your Email" required>
-                <textarea placeholder="Tell me about your business" required></textarea>
-                <button type="submit">Send Message</button>
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 md:py-32 relative">
+        <div class="max-w-2xl mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-5xl font-bold text-white mb-6">Let's automate your headaches away.</h2>
+            <p class="text-slate-400 mb-12 text-lg">Send me a quick message about what repetitive tasks are slowing down your business. I'll reply within 24 hours.</p>
+            
+            <form id="contact-form" class="space-y-6 glass-panel p-8 md:p-12 rounded-3xl border border-slate-800 text-left">
+                <div>
+                    <label class="block text-sm font-medium text-slate-300 mb-2">Your Email</label>
+                    <input type="email" placeholder="hello@yourbusiness.com" class="w-full p-4 rounded-xl bg-slate-900/50 border border-slate-700 text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-colors" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-300 mb-2">How can I help?</label>
+                    <textarea placeholder="e.g. I spend 5 hours a week copy-pasting customer info from emails to my spreadsheet..." class="w-full p-4 rounded-xl bg-slate-900/50 border border-slate-700 text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 min-h-[160px] resize-y transition-colors" required></textarea>
+                </div>
+                <button type="submit" class="w-full bg-brand-600 text-white py-4 rounded-xl font-bold shadow-lg shadow-brand-500/25 hover:bg-brand-500 transition-colors flex justify-center items-center gap-2">
+                    <span>Send Message</span>
+                    <i class="fas fa-paper-plane text-sm"></i>
+                </button>
             </form>
-        </section>
-    </main>
+        </div>
+    </section>
 
-    <footer>
-        <p>&copy; 2026 AI Solutions. Built with Clarity.</p>
+    <!-- Footer -->
+    <footer class="py-12 border-t border-slate-800/50 text-center bg-slate-950">
+        <p class="text-slate-500 text-sm flex items-center justify-center gap-2">
+            &copy; 2026 AI Catalyst. Helping local business scale with <i class="fas fa-heart text-brand-500/70"></i>
+        </p>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
