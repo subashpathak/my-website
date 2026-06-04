@@ -11,6 +11,14 @@
     --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+body.dark-mode {
+    --bg-primary: #121212;
+    --bg-secondary: #1E1E1E;
+    --text-primary: #FFFFFF;
+    --text-secondary: #A0A0A0;
+    --border: #333333;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -39,12 +47,21 @@ header {
     margin-bottom: 4rem;
 }
 
-.logo {
-    font-size: 1.25rem;
-    font-weight: 600;
+.theme-toggle {
+    background: none;
+    border: none;
     color: var(--text-primary);
-    text-decoration: none;
-    letter-spacing: -0.02em;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: background-color var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-toggle:hover {
+    background-color: var(--border);
 }
 
 nav {

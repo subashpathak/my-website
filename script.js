@@ -43,3 +43,31 @@ if (articlesContainer) {
         articlesContainer.appendChild(articleEl);
     });
 }
+
+// Theme Toggle Logic
+const themeToggleBtn = document.getElementById('theme-toggle');
+const moonIcon = document.getElementById('moon-icon');
+const sunIcon = document.getElementById('sun-icon');
+
+// Check for saved user preference, if any, on load of the website
+if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark-mode');
+    moonIcon.style.display = 'none';
+    sunIcon.style.display = 'block';
+}
+
+if (themeToggleBtn) {
+    themeToggleBtn.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        
+        if (document.body.classList.contains('dark-mode')) {
+            localStorage.setItem('theme', 'dark');
+            moonIcon.style.display = 'none';
+            sunIcon.style.display = 'block';
+        } else {
+            localStorage.setItem('theme', 'light');
+            moonIcon.style.display = 'block';
+            sunIcon.style.display = 'none';
+        }
+    });
+}
