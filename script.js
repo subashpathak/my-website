@@ -27,8 +27,19 @@ const articles = [
 
 const articlesContainer = document.getElementById('articles-container');
 
-if (articlesContainer) {
-    articles.forEach((article, index) => {
+function renderArticles(filterText = '') {
+    if (!articlesContainer) return;
+    
+    articlesContainer.innerHTML = '';
+    const lowerFilter = filterText.toLowerCase();
+    
+    const filteredArticles = articles.filter(article => {
+        return article.title.toLowerCase().includes(lowerFilter) ||
+               article.excerpt.toLowerCase().includes(lowerFilter) ||
+               article.category.toLowerCase().includes(lowerFilter);
+    });
+    
+    filteredArticles.forEach((article, index) => {
         const articleEl = document.createElement('a');
         articleEl.href = article.link;
         articleEl.className = 'article-card';
@@ -41,6 +52,17 @@ if (articlesContainer) {
         `;
         
         articlesContainer.appendChild(articleEl);
+    });
+}
+
+// Initial render
+renderArticles();
+
+// Search logic
+const searchInput = document.getElementById('search-input');
+if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+        renderArticles(e.target.value);
     });
 }
 
