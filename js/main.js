@@ -14,11 +14,9 @@ document.addEventListener("DOMContentLoaded", () => {
         // Map the route to the correct markdown file path
         let mdPath = `content/${hash}.md`;
         
-        // Special case for the blog listing
-        if (hash === 'blog') {
-            mdPath = 'content/blog/index.md';
-        } else if (hash.startsWith('blog/')) {
-            mdPath = `content/${hash}.md`;
+        // Special case for category index pages
+        if (['blog', 'books', 'movies'].includes(hash)) {
+            mdPath = `content/${hash}/index.md`;
         }
 
         try {

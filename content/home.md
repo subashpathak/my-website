@@ -1,6 +1,6 @@
 # Subash Pathak
 
-I am 
+
 
 ## About Me
 
