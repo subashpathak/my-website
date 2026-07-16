@@ -1,6 +1,6 @@
 # Subash Pathak
 
-Welcome to my minimal corner of the internet. I'm a software engineer and writer who loves to keep things simple.
+I am 
 
 ## About Me
 
@@ -8,6 +8,8 @@ I focus on building lightweight, efficient, and user-centric applications. This 
 
 ## Contact
 
-- **Email:** hello@example.com
-- **GitHub:** [github.com/subashpathak](#)
-- **Twitter:** [@subashpathak](#)
+- **Email:** subash12q@gmail.com
+- 
+
+
+
