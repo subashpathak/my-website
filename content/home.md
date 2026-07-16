@@ -1,5 +1,3 @@
-# Subash Pathak
-
 ## About Me
 Scratching the surfaces
 
