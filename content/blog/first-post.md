@@ -1,4 +1,4 @@
-# Hello World
+# Hello 
 *Published: 2026-07-15*
 
 Welcome to my new minimal blog! 
