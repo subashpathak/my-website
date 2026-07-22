@@ -1,6 +1,6 @@
 # The Odyssey
 
-![The Odyssey Poster](odyssey.jpeg)
+![The Odyssey Poster](the-odyssey.jpg)
 
 **Thoughts:** 
 Watched The Odyssey yesterday. An entertaining movie from start to finish. The story is told in typical Nolan way. Some diversions from the original. But the overall theme is intact. Nolan is saying this is a story of adventure. His spin on a warrior who survived the Trojan war for 12 years and the way he had to overcome struggles both mental and physicals is something to watch. Visually the movie lives upto its expectations. Sound design is amazing. 
