@@ -11,7 +11,11 @@ const server = http.createServer((req, res) => {
         '.html': 'text/html',
         '.js': 'text/javascript',
         '.css': 'text/css',
-        '.md': 'text/markdown'
+        '.md': 'text/markdown',
+        '.jpg': 'image/jpeg',
+        '.jpeg': 'image/jpeg',
+        '.png': 'image/png',
+        '.gif': 'image/gif'
     };
 
     const contentType = mimeTypes[extname] || 'application/octet-stream';
