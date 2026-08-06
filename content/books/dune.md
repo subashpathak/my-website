@@ -1,7 +1,7 @@
 # Dune
 **Author:** Frank Herbert
 
-<img src="dune-cover.jpg" width="200" alt="Dune Book Cover" />
+<img src="content/books/dune-cover.jpg" width="200" alt="Dune Book Cover" />
 
 It's 4am in the morning. I am looking outside the window of my apartment. Some lights are on. It is supposed to be hot today by Seattle standards. But right now i can feel the cool breeze passing through my window. I can hear the crickets chirping. Street lights are glowing. What would Liet Kynes think of this whole life and the location i am living through. It would be his dream. The one he dreamed for Arrakis. The Arrakis where dreamed of plants, proper weather patterns with a lot of moisture and the flow of water everywhere. 
 
