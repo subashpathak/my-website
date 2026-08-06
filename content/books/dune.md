@@ -3,6 +3,9 @@
 
 <img src="content/books/dune-cover.jpg" width="200" alt="Dune Book Cover" />
 
+August 6, 2026
+
+
 It's 4am in the morning. I am looking outside the window of my apartment. Some lights are on. It is supposed to be hot today by Seattle standards. But right now i can feel the cool breeze passing through my window. I can hear the crickets chirping. Street lights are glowing. What would Liet Kynes think of this whole life and the location i am living through. It would be his dream. The one he dreamed for Arrakis. The Arrakis where dreamed of plants, proper weather patterns with a lot of moisture and the flow of water everywhere. 
 
 Dune is a world of extreme. It is ruthless but brings out the best in you. It finds a way to get into your inner psyche as well. Maybe you have that worm inside which you wanted to conquer. Maybe the Paul Atreides in you will rise someday to ride the inner sandworm and rule the desert within you. And transform the whole system from scratch. Anyways enough of this inner mental analogy. Let's dive into the book deeper.
