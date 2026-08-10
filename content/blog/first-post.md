@@ -1,7 +1,7 @@
-# Taleb Dune
+# Taleb,  Dune Rereading and Rewatching
 
 
-08/10/2026
+August 9, 2026
 
 
 I have not been writing for few days in a row. It’s a nice break. Was listening to Nassim Taleb podcast yesterday and this morning on a walk. He goes through many things relevant. I never knew China was so libertarian towards small businesses. When they start to get large government scrutiny slips in. So in China on average you could do really well for your individual self. But you can’t get big billionaires and trillionaires. One person is not awarded ridiculous amount of wealth. But the issue becomes that of dictatorship entering into governance. It was a fun podcast to listen to  both times. There is a lot to learn from Taleb.This is the call for me to start replicating his technical incerto. 
