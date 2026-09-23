@@ -36,6 +36,11 @@
   }
   article.entry{ margin-bottom:48px; }
   article.entry h3{ font-size:1.4rem; font-weight:400; margin:0 0 4px; }
+  .num{
+    font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;
+    font-size:0.75rem; text-transform:uppercase; letter-spacing:0.14em;
+    color:var(--muted); margin-bottom:8px;
+  }
   .meta{
     font-size:0.85rem; color:var(--muted); margin-bottom:16px;
     font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;
@@ -53,10 +58,6 @@
     white-space:pre-wrap;
   }
   .notes{ font-size:0.98rem; white-space:pre-wrap; }
-  footer{
-    margin-top:80px; padding-top:24px;
-    border-top:1px solid var(--line); font-size:0.85rem; color:var(--muted);
-  }
   /* Editor */
   .overlay{
     position:fixed; inset:0; background:rgba(43,38,32,0.45);
@@ -118,8 +119,6 @@
 
     <h2 class="section">The log</h2>
     <div id="log"></div>
-
-    <footer>A personal commonplace, kept one idea at a time.</footer>
   </div>
 
   <div id="editorOverlay" class="overlay" hidden>
@@ -203,6 +202,7 @@
     }
     log.innerHTML = liveEntries.map(function(e, idx){
       return '<article class="entry">' +
+        '<div class="num">No. ' + (liveEntries.length - idx) + '</div>' +
         '<h3>' + esc(e.title) + '</h3>' +
         '<div class="meta">' + esc(e.author || "Unknown author") +
           (e.date ? " &middot; " + esc(e.date) : "") +
