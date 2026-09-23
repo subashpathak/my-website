@@ -202,7 +202,7 @@
     }
     log.innerHTML = liveEntries.map(function(e, idx){
       return '<article class="entry">' +
-        '<div class="num">Post #' + (liveEntries.length - idx) + '</div>' +
+        '<div class="num">Post #' + String(liveEntries.length - idx).padStart(2, "0") + '</div>' +
         '<h3>' + esc(e.title) + '</h3>' +
         '<div class="meta">' + esc(e.author || "Unknown author") +
           (e.date ? " &middot; " + esc(e.date) : "") +
