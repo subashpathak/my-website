@@ -7,7 +7,7 @@
 <style>
   :root{
     --paper:#faf7f1; --ink:#2b2620; --muted:#8a8073;
-    --accent:#9a6b3f; --line:#e7dfd2;
+    --accent:#9a6b3f; --line:#e7dfd2; --card:#fffdf9;
   }
   *{ box-sizing:border-box; }
   body{
@@ -15,15 +15,22 @@
     font-family:Georgia,'Times New Roman',serif; line-height:1.7;
   }
   .wrap{ max-width:640px; margin:0 auto; padding:64px 24px 96px; }
-  header{ margin-bottom:56px; }
+  .topbar{ display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:56px; }
   h1{ font-size:2.2rem; font-weight:400; margin:0 0 12px; letter-spacing:-0.01em; }
   .practice{ color:var(--muted); font-style:italic; font-size:1.05rem; margin:0; }
+  .write-btn{
+    flex-shrink:0; margin-top:6px; cursor:pointer;
+    font-family:-apple-system,'Helvetica Neue',Arial,sans-serif; font-size:0.9rem;
+    background:var(--ink); color:var(--paper); border:none; border-radius:999px;
+    padding:10px 22px;
+  }
+  .write-btn:hover{ opacity:0.85; }
   .how{
     border-top:1px solid var(--line); border-bottom:1px solid var(--line);
     padding:20px 0; margin-bottom:56px; font-size:0.95rem; color:var(--muted);
   }
   .how strong{ color:var(--ink); }
-  h2{
+  h2.section{
     font-size:0.8rem; text-transform:uppercase; letter-spacing:0.14em;
     color:var(--muted); font-weight:400; margin:0 0 24px;
     font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;
@@ -42,31 +49,298 @@
     border-left:3px solid var(--accent);
     padding:4px 0 4px 20px; margin:0 0 16px; font-size:1.1rem;
   }
-  .notes{ font-size:0.98rem; }
+  .notes{ font-size:0.98rem; white-space:pre-wrap; }
   footer{
     margin-top:80px; padding-top:24px;
     border-top:1px solid var(--line); font-size:0.85rem; color:var(--muted);
   }
+  /* Editor */
+  .overlay{
+    position:fixed; inset:0; background:rgba(43,38,32,0.45);
+    display:flex; align-items:flex-start; justify-content:center;
+    padding:48px 16px; overflow-y:auto; z-index:10;
+  }
+  .overlay[hidden]{ display:none; }
+  .editor{
+    background:var(--card); border-radius:12px; padding:32px;
+    width:100%; max-width:560px; box-shadow:0 24px 64px rgba(0,0,0,0.25);
+  }
+  .editor h2{
+    font-family:Georgia,serif; font-size:1.4rem; font-weight:400;
+    margin:0 0 20px; text-transform:none; letter-spacing:0; color:var(--ink);
+  }
+  .editor label{
+    display:block; font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;
+    font-size:0.85rem; color:var(--muted); margin-bottom:16px;
+  }
+  .editor input[type=text], .editor input[type=password], .editor textarea{
+    display:block; width:100%; margin-top:6px; padding:10px 12px;
+    font-family:Georgia,serif; font-size:1rem; color:var(--ink);
+    background:#fff; border:1px solid var(--line); border-radius:8px;
+  }
+  .editor textarea{ resize:vertical; }
+  .editor .row{ display:flex; gap:12px; margin-top:8px; }
+  .editor button{
+    cursor:pointer; font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;
+    font-size:0.95rem; border:none; border-radius:999px; padding:12px 28px;
+    background:var(--ink); color:var(--paper);
+  }
+  .editor button.ghost{ background:transparent; color:var(--muted); border:1px solid var(--line); }
+  .editor button:disabled{ opacity:0.5; cursor:wait; }
+  .status{
+    font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;
+    font-size:0.9rem; color:var(--muted); margin:16px 0 0; min-height:1.4em;
+  }
+  .status.ok{ color:#2f7a3d; }
+  .status.err{ color:#a33b2e; }
+  .token-help{
+    font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;
+    font-size:0.85rem; color:var(--muted);
+    background:var(--paper); border:1px solid var(--line); border-radius:8px;
+    padding:12px 16px; margin:0 0 12px;
+  }
+  .token-help ol{ margin:8px 0 0; padding-left:20px; }
+  .token-help a{ color:var(--accent); }
 </style>
 </head>
 <body>
   <div class="wrap">
-    <header>
-      <h1>One Book, One Idea</h1>
-      <p class="practice">Finish a book. Keep one durable idea.</p>
-    </header>
+    <div class="topbar">
+      <div>
+        <h1>One Book, One Idea</h1>
+        <p class="practice">Finish a book. Keep one durable idea.</p>
+      </div>
+      <button id="writeBtn" class="write-btn" type="button">Write</button>
+    </div>
 
     <div class="how">
       <strong>How this works:</strong> this is a personal reading log.
-      When you finish a book, send me the title and the one idea worth keeping,
-      and I&rsquo;ll publish it here immediately.
+      Hit <strong>Write</strong>, type the book and the one idea worth keeping,
+      and <strong>Publish</strong> &mdash; it goes live on this site right away.
     </div>
 
-    <h2>The log</h2>
-
-    <div class="empty">Nothing here yet.<br>The first book is waiting.</div>
+    <h2 class="section">The log</h2>
+    <div id="log"></div>
 
     <footer>A personal commonplace, kept one idea at a time.</footer>
   </div>
+
+  <div id="editorOverlay" class="overlay" hidden>
+    <div class="editor">
+      <h2>New entry</h2>
+      <label>Book title
+        <input id="fTitle" type="text" placeholder="The book you finished" autocomplete="off">
+      </label>
+      <label>Author
+        <input id="fAuthor" type="text" placeholder="Who wrote it" autocomplete="off">
+      </label>
+      <label>The durable idea
+        <textarea id="fIdea" rows="3" placeholder="The one idea worth keeping"></textarea>
+      </label>
+      <label>Notes
+        <textarea id="fNotes" rows="5" placeholder="Anything else you want to remember (optional)"></textarea>
+      </label>
+      <div id="tokenBox" hidden>
+        <div class="token-help">
+          <strong>One-time setup.</strong> Publishing writes straight to this site&rsquo;s
+          files on GitHub, so the page needs a token that is allowed to do that.
+          The token is stored only in this browser, never sent anywhere except GitHub.
+          <ol>
+            <li>Open <a href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener">github.com/settings/tokens</a> and choose <em>Generate new token</em>.</li>
+            <li>Under <em>Repository access</em> pick <em>Only select repositories</em> and choose <strong>my-website</strong>.</li>
+            <li>Under <em>Permissions</em> set <em>Contents</em> to <strong>Read and write</strong>, then generate the token.</li>
+            <li>Copy it and paste it below.</li>
+          </ol>
+        </div>
+        <label>GitHub token
+          <input id="fToken" type="password" placeholder="Paste your token" autocomplete="off">
+        </label>
+      </div>
+      <div class="row">
+        <button id="publishBtn" type="button">Publish</button>
+        <button id="cancelBtn" class="ghost" type="button">Cancel</button>
+      </div>
+      <p id="status" class="status"></p>
+    </div>
+  </div>
+
+<script id="entries-data" type="application/json">
+[]
+</script>
+
+<script>
+(function(){
+  "use strict";
+  var OWNER = "subashpathak", REPO = "my-website", BRANCH = "main";
+  var TOKEN_KEY = "oboi_gh_token";
+
+  function esc(s){
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+    });
+  }
+
+  /* ---------- render the log ---------- */
+  function getEntries(){
+    try {
+      var raw = document.getElementById("entries-data").textContent;
+      var arr = JSON.parse(raw);
+      return Array.isArray(arr) ? arr : [];
+    } catch(e){ return []; }
+  }
+  function render(){
+    var log = document.getElementById("log");
+    var entries = getEntries();
+    if(!entries.length){
+      log.innerHTML = '<div class="empty">Nothing here yet.<br>The first book is waiting.</div>';
+      return;
+    }
+    log.innerHTML = entries.map(function(e){
+      return '<article class="entry">' +
+        '<h3>' + esc(e.title) + '</h3>' +
+        '<div class="meta">' + esc(e.author || "Unknown author") +
+          (e.date ? " &middot; " + esc(e.date) : "") + '</div>' +
+        '<p class="idea">' + esc(e.idea) + '</p>' +
+        (e.notes ? '<div class="notes">' + esc(e.notes) + '</div>' : '') +
+      '</article>';
+    }).join("");
+  }
+
+  /* ---------- editor ---------- */
+  var overlay = document.getElementById("editorOverlay");
+  var statusEl = document.getElementById("status");
+  function setStatus(msg, cls){
+    statusEl.textContent = msg;
+    statusEl.className = "status" + (cls ? " " + cls : "");
+  }
+  document.getElementById("writeBtn").addEventListener("click", function(){
+    document.getElementById("tokenBox").hidden = !!localStorage.getItem(TOKEN_KEY);
+    setStatus("");
+    overlay.hidden = false;
+  });
+  document.getElementById("cancelBtn").addEventListener("click", function(){
+    overlay.hidden = true;
+  });
+  overlay.addEventListener("click", function(ev){
+    if(ev.target === overlay) overlay.hidden = true;
+  });
+
+  /* ---------- publishing: write straight to GitHub ---------- */
+  function b64ToText(b64){
+    var bin = atob(b64.replace(/\s/g, ""));
+    var bytes = Uint8Array.from(bin, function(c){ return c.charCodeAt(0); });
+    return new TextDecoder().decode(bytes);
+  }
+  function textToB64(str){
+    var bytes = new TextEncoder().encode(str);
+    var bin = "";
+    bytes.forEach(function(b){ bin += String.fromCharCode(b); });
+    return btoa(bin);
+  }
+  function clean(s){
+    return String(s == null ? "" : s).replace(/<\/script/gi, "<\\/script");
+  }
+  function upsertEntry(html, entry){
+    var re = /(<script id="entries-data" type="application\/json">)[\s\S]*?(<\/script>)/;
+    var m = html.match(re);
+    if(!m) throw new Error("entries block not found");
+    var inner = m[0].replace(/^<script[^>]*>/, "").replace(/<\/script>$/, "");
+    var arr = JSON.parse(inner);
+    if(!Array.isArray(arr)) arr = [];
+    arr.unshift(entry);
+    return html.replace(re, "$1\n" + JSON.stringify(arr, null, 2) + "\n$2");
+  }
+
+  document.getElementById("publishBtn").addEventListener("click", function(){
+    var title = document.getElementById("fTitle").value.trim();
+    var author = document.getElementById("fAuthor").value.trim();
+    var idea = document.getElementById("fIdea").value.trim();
+    var notes = document.getElementById("fNotes").value.trim();
+    if(!title || !idea){
+      setStatus("Give the entry a book title and the one durable idea.", "err");
+      return;
+    }
+    var token = localStorage.getItem(TOKEN_KEY);
+    var pasted = document.getElementById("fToken").value.trim();
+    if(pasted){
+      token = pasted;
+      localStorage.setItem(TOKEN_KEY, token);
+      document.getElementById("fToken").value = "";
+      document.getElementById("tokenBox").hidden = true;
+    }
+    if(!token){
+      document.getElementById("tokenBox").hidden = false;
+      setStatus("Paste your GitHub token above first (one-time setup).", "err");
+      return;
+    }
+
+    var entry = {
+      title: clean(title),
+      author: clean(author),
+      idea: clean(idea),
+      notes: clean(notes),
+      date: new Date().toISOString().slice(0, 10)
+    };
+    var headers = {
+      "Accept": "application/vnd.github+json",
+      "Authorization": "Bearer " + token,
+      "Content-Type": "application/json"
+    };
+    var btn = document.getElementById("publishBtn");
+    btn.disabled = true;
+    setStatus("Publishing\u2026");
+
+    var fileUrl = "https://api.github.com/repos/" + OWNER + "/" + REPO + "/contents/index.html";
+    fetch(fileUrl + "?ref=" + BRANCH, {headers: headers})
+      .then(function(r){
+        if(r.status === 401) throw new Error("bad-token");
+        if(!r.ok) throw new Error("read-failed");
+        return r.json();
+      })
+      .then(function(data){
+        var html = b64ToText(data.content);
+        var updated = upsertEntry(html, entry);
+        return fetch(fileUrl, {
+          method: "PUT",
+          headers: headers,
+          body: JSON.stringify({
+            message: "Publish: " + title,
+            content: textToB64(updated),
+            sha: data.sha,
+            branch: BRANCH
+          })
+        });
+      })
+      .then(function(r){
+        if(r.status === 401) throw new Error("bad-token");
+        if(r.status === 409) throw new Error("conflict");
+        if(!r.ok) throw new Error("write-failed");
+        return r.json();
+      })
+      .then(function(){
+        setStatus("Published \u2014 it goes live on the site in about a minute. Reload then to see it.", "ok");
+        document.getElementById("fTitle").value = "";
+        document.getElementById("fAuthor").value = "";
+        document.getElementById("fIdea").value = "";
+        document.getElementById("fNotes").value = "";
+        btn.disabled = false;
+      })
+      .catch(function(err){
+        btn.disabled = false;
+        if(err.message === "bad-token"){
+          localStorage.removeItem(TOKEN_KEY);
+          document.getElementById("tokenBox").hidden = false;
+          setStatus("That token didn't work. Check it on GitHub and paste it again.", "err");
+        } else if(err.message === "conflict"){
+          setStatus("The page changed underneath you \u2014 reload the site and try again.", "err");
+        } else {
+          setStatus("Couldn't publish. Check your connection and try again.", "err");
+        }
+      });
+  });
+
+  render();
+})();
+</script>
 </body>
 </html>
