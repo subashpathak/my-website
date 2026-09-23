@@ -1,52 +1,678 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Subash Pathak - Personal Portfolio and Blog">
-    <title>Subash Pathak</title>
-    <!-- Minimal Text-First CSS -->
-    <link rel="stylesheet" href="css/main.css">
-    <!-- Marked.js for parsing Markdown -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:," />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,650&display=swap" rel="stylesheet">
+  <title>The Long View — a commonplace book</title>
+  <style>
+    :root {
+      --paper: #f7f7f3;
+      --sheet: #ffffff;
+      --ink: #171915;
+      --muted: #5e625b;
+      --line: #c9cdc4;
+      --soft: #e7e9e2;
+      --red: #df3f2d;
+      --blue: #155f82;
+      --yellow: #f0be3f;
+      --green: #4c785e;
+      --shadow: rgba(24, 26, 21, .12);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --paper: #11130f;
+        --sheet: #1a1d18;
+        --ink: #f0f1ea;
+        --muted: #b4b9ae;
+        --line: #44493f;
+        --soft: #292d27;
+        --red: #f06a56;
+        --blue: #69aed0;
+        --yellow: #e8b94b;
+        --green: #8abc9b;
+        --shadow: rgba(0, 0, 0, .34);
+      }
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: "IBM Plex Sans", sans-serif;
+      line-height: 1.55;
+    }
+    button, a { font: inherit; }
+    a { color: inherit; }
+    .wrap { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+    .mast {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: end;
+      padding: 26px 0 16px;
+      border-bottom: 1px solid var(--ink);
+    }
+    .edition, .stamp, .section-no, .eyebrow, .theme-num {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .edition { color: var(--muted); }
+    .stamp { text-align: right; }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(340px, .75fr);
+      min-height: 640px;
+      border-bottom: 1px solid var(--ink);
+    }
+    .hero-copy {
+      padding: 64px 52px 54px 0;
+      border-right: 1px solid var(--ink);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .eyebrow { color: var(--red); margin-bottom: 24px; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      margin-bottom: 28px;
+      max-width: 780px;
+      font: 500 clamp(60px, 8.6vw, 126px)/.82 "Newsreader", serif;
+      letter-spacing: -.055em;
+    }
+    .deck {
+      max-width: 640px;
+      margin: 0;
+      font: 400 clamp(20px, 2.3vw, 31px)/1.22 "Newsreader", serif;
+      color: var(--muted);
+    }
+    .hero-bottom {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 28px;
+      margin-top: 54px;
+    }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 11px;
+      color: var(--muted);
+      background: var(--sheet);
+    }
+    .down {
+      display: inline-grid;
+      place-items: center;
+      width: 46px;
+      height: 46px;
+      border: 1px solid var(--ink);
+      border-radius: 50%;
+      text-decoration: none;
+      transition: background .18s, color .18s;
+    }
+    .down:hover { background: var(--ink); color: var(--paper); }
+    .hero-art {
+      position: relative;
+      overflow: hidden;
+      padding: 30px 0 30px 30px;
+      display: grid;
+      align-items: center;
+    }
+    .map {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      width: 100%;
+      max-height: 560px;
+      background: var(--blue);
+      border-radius: 44% 44% 4px 4px;
+      overflow: hidden;
+      box-shadow: 14px 14px 0 var(--yellow);
+    }
+    .map svg { width: 100%; height: 100%; display: block; }
+    .map-label {
+      position: absolute;
+      inset: auto 22px 20px;
+      color: #fff;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 11px;
+      letter-spacing: .04em;
+    }
+    .section { padding: 78px 0; border-bottom: 1px solid var(--line); }
+    .section-head {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 24px;
+      margin-bottom: 42px;
+    }
+    .section-no { color: var(--red); padding-top: 10px; }
+    h2 {
+      max-width: 760px;
+      margin-bottom: 0;
+      font: 500 clamp(38px, 5.4vw, 72px)/.95 "Newsreader", serif;
+      letter-spacing: -.035em;
+    }
+    .lenses {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--ink);
+      border-bottom: 1px solid var(--ink);
+    }
+    .lens { padding: 24px 22px 30px; min-height: 250px; border-right: 1px solid var(--line); }
+    .lens:last-child { border-right: 0; }
+    .lens i { display: block; width: 26px; height: 5px; margin: 0 0 54px; background: var(--red); }
+    .lens:nth-child(2) i { background: var(--blue); }
+    .lens:nth-child(3) i { background: var(--yellow); }
+    .lens:nth-child(4) i { background: var(--green); }
+    .lens h3 { font: 500 28px/1.05 "Newsreader", serif; margin-bottom: 14px; }
+    .lens p { color: var(--muted); font-size: 14px; margin-bottom: 0; }
+    .notes-grid {
+      display: grid;
+      grid-template-columns: .78fr 1.22fr;
+      border: 1px solid var(--ink);
+      background: var(--sheet);
+    }
+    .note-tabs { border-right: 1px solid var(--ink); }
+    .note-tabs button {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      text-align: left;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      background: transparent;
+      color: var(--ink);
+      padding: 20px;
+      cursor: pointer;
+    }
+    .note-tabs button:last-child { border-bottom: 0; }
+    .note-tabs button[aria-selected="true"] { background: var(--ink); color: var(--paper); }
+    .tab-index { font-family: "IBM Plex Mono", monospace; font-size: 11px; padding-top: 4px; }
+    .tab-label { font: 500 24px/1.05 "Newsreader", serif; }
+    .note-stage { padding: 44px; min-height: 430px; display: flex; flex-direction: column; }
+    .note-stage .kicker { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--red); text-transform: uppercase; letter-spacing: .08em; }
+    .note-stage blockquote {
+      margin: 28px 0 24px;
+      max-width: 660px;
+      font: 400 clamp(30px, 4vw, 52px)/1.04 "Newsreader", serif;
+      letter-spacing: -.025em;
+    }
+    .note-stage p { margin: 0; max-width: 620px; color: var(--muted); }
+    .note-prompt { margin-top: auto !important; padding-top: 30px; color: var(--ink) !important; font-size: 14px; }
+    .note-prompt strong { font-weight: 600; }
+    .note-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+    .note-meta span { padding: 5px 8px; border: 1px solid var(--line); font: 400 10px/1.2 "IBM Plex Mono", monospace; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+    .book-list { border-top: 1px solid var(--ink); }
+    .book-note {
+      display: grid;
+      grid-template-columns: 120px minmax(220px, .72fr) minmax(0, 1.28fr);
+      gap: 24px;
+      padding: 34px 0 38px;
+      border-bottom: 1px solid var(--line);
+      scroll-margin-top: 24px;
+    }
+    .book-no { font: 400 11px/1.4 "IBM Plex Mono", monospace; letter-spacing: .06em; text-transform: uppercase; color: var(--red); }
+    .book-title h3 { margin-bottom: 8px; font: 500 clamp(28px, 3.2vw, 44px)/.98 "Newsreader", serif; letter-spacing: -.025em; }
+    .book-title p { margin: 0; color: var(--muted); font-size: 13px; }
+    .book-body { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+    .book-body h4, .capture-form label { margin: 0 0 7px; font: 500 11px/1.3 "IBM Plex Mono", monospace; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+    .book-body p { margin: 0; font: 400 19px/1.35 "Newsreader", serif; }
+    .book-connection { grid-column: 1 / -1; padding-top: 18px; border-top: 1px solid var(--soft); font: 400 12px/1.4 "IBM Plex Mono", monospace; color: var(--muted); }
+    .book-connection a { color: var(--blue); text-underline-offset: 3px; }
+    .note-source { margin-top: 18px; font: 400 12px/1.4 "IBM Plex Mono", monospace; }
+    .note-source a { color: var(--blue); text-underline-offset: 3px; }
+    .capture-shell { display: grid; grid-template-columns: .8fr 1.2fr; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+    .capture-intro { padding: 28px 34px 28px 0; border-right: 1px solid var(--line); }
+    .capture-intro p { color: var(--muted); max-width: 390px; }
+    .capture-intro strong { display: block; margin-bottom: 10px; font: 500 28px/1.08 "Newsreader", serif; }
+    .capture-form { padding: 28px 0 28px 34px; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .field { min-width: 0; }
+    .field-wide { grid-column: 1 / -1; }
+    .capture-form label { display: block; }
+    .capture-form input, .capture-form textarea {
+      width: 100%; border: 1px solid var(--line); border-radius: 0; padding: 11px 12px;
+      background: var(--sheet); color: var(--ink); font: 400 15px/1.45 "IBM Plex Sans", sans-serif;
+    }
+    .capture-form textarea { min-height: 112px; resize: vertical; }
+    .capture-actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+    .capture-actions button, .import-label { border: 1px solid var(--ink); background: var(--ink); color: var(--paper); padding: 10px 16px; cursor: pointer; }
+    .capture-actions button:hover, .import-label:hover { background: var(--red); border-color: var(--red); }
+    .capture-actions .secondary, .import-label { background: transparent; color: var(--ink); }
+    .import-label input { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0; }
+    .capture-status { margin: 0; color: var(--muted); font-size: 13px; }
+    .theme-list { border-top: 1px solid var(--ink); }
+    .theme {
+      display: grid;
+      grid-template-columns: 90px 1fr auto;
+      gap: 24px;
+      align-items: center;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .theme-num { color: var(--muted); }
+    .theme h3 { margin: 0; font: 500 clamp(27px, 4vw, 48px)/1 "Newsreader", serif; }
+    .theme p { width: min(360px, 100%); margin: 0; color: var(--muted); font-size: 14px; }
+    .disclosure {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 24px;
+      padding: 34px 0 50px;
+      color: var(--muted);
+    }
+    .disclosure strong { color: var(--ink); font-weight: 600; }
+    .disclosure p { max-width: 790px; margin: 0; font-size: 13px; }
+    @media (max-width: 820px) {
+      .wrap { width: min(100% - 28px, 680px); }
+      .hero { grid-template-columns: 1fr; min-height: 0; }
+      .hero-copy { padding: 46px 0 42px; border-right: 0; }
+      .hero-art { padding: 16px 10px 44px 0; }
+      .map { max-height: none; width: min(100%, 440px); margin-left: auto; }
+      .section { padding: 58px 0; }
+      .section-head, .disclosure { grid-template-columns: 1fr; gap: 12px; }
+      .lenses { grid-template-columns: 1fr 1fr; }
+      .lens:nth-child(2) { border-right: 0; }
+      .lens:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+      .notes-grid { grid-template-columns: 1fr; }
+      .note-tabs { border-right: 0; border-bottom: 1px solid var(--ink); display: grid; grid-template-columns: 1fr 1fr; }
+      .note-tabs button:nth-child(odd) { border-right: 1px solid var(--line); }
+      .note-tabs button:nth-child(3) { border-bottom: 0; }
+      .note-stage { min-height: 330px; padding: 32px 26px; }
+      .book-note { grid-template-columns: 72px 1fr; }
+      .book-body { grid-column: 2; }
+      .capture-shell { grid-template-columns: 1fr; }
+      .capture-intro { padding: 26px 0; border-right: 0; border-bottom: 1px solid var(--line); }
+      .capture-form { padding: 28px 0; }
+      .theme { grid-template-columns: 52px 1fr; gap: 12px; }
+      .theme p { grid-column: 2; }
+    }
+    @media (max-width: 520px) {
+      .mast { grid-template-columns: 1fr; gap: 6px; }
+      .stamp { text-align: left; }
+      h1 { font-size: clamp(52px, 18vw, 78px); }
+      .hero-bottom { grid-template-columns: 1fr; }
+      .down { display: none; }
+      .map { box-shadow: 8px 8px 0 var(--yellow); }
+      .lenses { grid-template-columns: 1fr; }
+      .lens, .lens:nth-child(2) { border-right: 0; border-bottom: 1px solid var(--line); min-height: 0; }
+      .lens:last-child { border-bottom: 0; }
+      .lens i { margin-bottom: 28px; }
+      .note-tabs { grid-template-columns: 1fr; }
+      .note-tabs button, .note-tabs button:nth-child(odd), .note-tabs button:nth-child(3) { border-right: 0; border-bottom: 1px solid var(--line); }
+      .note-tabs button:last-child { border-bottom: 0; }
+      .note-stage blockquote { font-size: 34px; }
+      .book-note { grid-template-columns: 1fr; gap: 10px; }
+      .book-body { grid-column: 1; grid-template-columns: 1fr; gap: 22px; }
+      .book-connection { grid-column: 1; }
+      .capture-form { grid-template-columns: 1fr; }
+      .field, .field-wide, .capture-actions { grid-column: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
 </head>
 <body>
-    <header style="display: flex; justify-content: space-between; align-items: center;">
-        <nav>
-            <ul>
-                <li>
-                    <a href="#home">Home / Contact Info</a>
-                    <span class="tab-desc">About me and how to reach out</span>
-                </li>
-                <li>
-                    <a href="#movies">Movies/Series</a>
-                    <span class="tab-desc">What I'm watching</span>
-                </li>
-                <li>
-                    <a href="#books">Books</a>
-                    <span class="tab-desc">What I'm reading</span>
-                </li>
-                <li>
-                    <a href="#blog">Blog</a>
-                    <span class="tab-desc">My latest thoughts</span>
-                </li>
-            </ul>
-        </nav>
-        <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: 1px solid var(--border-color); color: var(--text-color); padding: 0.25rem 0.5rem; cursor: pointer; border-radius: 4px; font-size: 0.9em;">
-            🌓 Theme
-        </button>
+  <main class="wrap">
+    <header class="mast" aria-label="Edition details">
+      <div class="edition">Personal commonplace · volume 01</div>
+      <div class="stamp">Books → ideas → decisions</div>
     </header>
 
-    <main id="content">
-        <!-- Markdown content will be dynamically injected here -->
-        <p>Loading...</p>
-    </main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <div>
+          <div class="eyebrow">A home for connected thinking</div>
+          <h1 id="hero-title">The<br>Long View</h1>
+          <p class="deck">A living index of ideas worth returning to—distilled from reading, tested against decisions, and connected across philosophy, markets, technology, and life.</p>
+        </div>
+        <div class="hero-bottom">
+          <div class="tags" aria-label="Subject areas">
+            <span class="tag">READING</span>
+            <span class="tag">LONG-TERM THINKING</span>
+            <span class="tag">TECHNOLOGY</span>
+            <span class="tag">IDEAS</span>
+          </div>
+          <a class="down" href="#method" aria-label="Continue to the method">↓</a>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="map">
+          <svg viewBox="0 0 480 600" role="img">
+            <rect width="480" height="600" fill="#155f82"/>
+            <circle cx="240" cy="250" r="170" fill="none" stroke="#f7f7f3" stroke-width="1.2" opacity=".75"/>
+            <circle cx="240" cy="250" r="108" fill="none" stroke="#f7f7f3" stroke-width="1.2" opacity=".75"/>
+            <circle cx="240" cy="250" r="48" fill="#f0be3f"/>
+            <path d="M70 250h340M240 80v340" stroke="#f7f7f3" stroke-width="1" opacity=".45"/>
+            <circle cx="92" cy="166" r="11" fill="#df3f2d"/>
+            <circle cx="346" cy="170" r="7" fill="#f7f7f3"/>
+            <circle cx="150" cy="360" r="8" fill="#4c785e"/>
+            <path d="M98 169C155 116 260 112 340 169M154 357C201 410 293 405 355 341" fill="none" stroke="#f7f7f3" stroke-width="2" stroke-dasharray="7 10" opacity=".72"/>
+            <path d="M111 500h258" stroke="#f7f7f3" stroke-width="1"/>
+            <path d="M111 522h180M111 544h225" stroke="#f7f7f3" stroke-width="7" opacity=".26"/>
+          </svg>
+          <div class="map-label">A thought is more useful when you can find its neighbors.</div>
+        </div>
+      </div>
+    </section>
 
-    <footer>
-        <p>&copy; 2026 Subash Pathak.</p>
+    <section class="section" id="method" aria-labelledby="method-title">
+      <div class="section-head">
+        <div class="section-no">01 / Method</div>
+        <h2 id="method-title">Not a bookshelf. A thinking system.</h2>
+      </div>
+      <div class="lenses">
+        <article class="lens"><i></i><h3>Read</h3><p>Capture the argument, the line worth keeping, and the context around it.</p></article>
+        <article class="lens"><i></i><h3>Connect</h3><p>Link an idea across books, technology, markets, philosophy, and daily life.</p></article>
+        <article class="lens"><i></i><h3>Test</h3><p>Turn insight into a question, a decision rule, or a small experiment.</p></article>
+        <article class="lens"><i></i><h3>Return</h3><p>Revisit what still holds, what changed, and what deserves a second reading.</p></article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="note-title">
+      <div class="section-head">
+        <div class="section-no">02 / First entries</div>
+        <h2 id="note-title">Four notes to begin the conversation.</h2>
+      </div>
+      <div class="notes-grid">
+        <div class="note-tabs" role="tablist" aria-label="Commonplace entries">
+          <button role="tab" aria-selected="true" aria-controls="note-panel" data-note="attention"><span class="tab-index">001</span><span class="tab-label">Attention compounds</span></button>
+          <button role="tab" aria-selected="false" aria-controls="note-panel" data-note="judgment"><span class="tab-index">002</span><span class="tab-label">Judge the process</span></button>
+          <button role="tab" aria-selected="false" aria-controls="note-panel" data-note="tools"><span class="tab-index">003</span><span class="tab-label">Tools shape questions</span></button>
+          <button role="tab" aria-selected="false" aria-controls="note-panel" data-note="enough"><span class="tab-index">004</span><span class="tab-label">Define enough</span></button>
+        </div>
+        <article class="note-stage" id="note-panel" role="tabpanel" aria-live="polite">
+          <div class="kicker" id="note-kicker">Entry 001 · Attention</div>
+          <blockquote id="note-quote">What we return to becomes easier to notice; what we notice becomes easier to understand.</blockquote>
+          <p id="note-copy">Attention behaves like a quiet form of capital. Repeated contact builds context, and context lets subtle patterns become visible. The practical question is not only what deserves focus today, but what deserves repeated focus over years.</p>
+          <p class="note-source">Read beside: <a id="note-source" href="#book-01">Meditations</a></p>
+          <p class="note-prompt" id="note-prompt"><strong>Try:</strong> Choose one subject you want to understand in five years. Give it one undistracted hour each week.</p>
+          <div class="note-meta" id="note-meta"><span>long-term thinking</span><span>practice</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="books" aria-labelledby="books-title">
+      <div class="section-head">
+        <div class="section-no">03 / Book notes</div>
+        <h2 id="books-title">A starter shelf, distilled one book at a time.</h2>
+      </div>
+      <div class="book-list">
+        <article class="book-note" id="book-01">
+          <div class="book-no">Book 01</div>
+          <div class="book-title"><h3>Meditations</h3><p>Marcus Aurelius · philosophy</p></div>
+          <div class="book-body">
+            <div><h4>Distilled argument</h4><p>We do not control events, only the quality of attention and action we bring to them.</p></div>
+            <div><h4>What to keep</h4><p>Character is built in ordinary repetitions. Philosophy matters most when it changes the next response.</p></div>
+            <div class="book-connection">Connected note: <a href="#note-title" data-open-note="attention">001 · Attention compounds</a></div>
+          </div>
+        </article>
+        <article class="book-note" id="book-02">
+          <div class="book-no">Book 02</div>
+          <div class="book-title"><h3>The Psychology of Money</h3><p>Morgan Housel · markets &amp; behavior</p></div>
+          <div class="book-body">
+            <div><h4>Distilled argument</h4><p>Financial outcomes depend as much on behavior, time, and survival as on technical intelligence.</p></div>
+            <div><h4>What to keep</h4><p>Room for error is not wasted capacity. It is what lets a sound plan survive an uncertain world.</p></div>
+            <div class="book-connection">Connected note: <a href="#note-title" data-open-note="judgment">002 · Judge the process</a></div>
+          </div>
+        </article>
+        <article class="book-note" id="book-03">
+          <div class="book-no">Book 03</div>
+          <div class="book-title"><h3>The Beginning of Infinity</h3><p>David Deutsch · knowledge &amp; progress</p></div>
+          <div class="book-body">
+            <div><h4>Distilled argument</h4><p>Problems are soluble when we can create better explanations and keep criticism open.</p></div>
+            <div><h4>What to keep</h4><p>Optimism is not a forecast that things will go well; it is a stance that improvement remains possible through knowledge.</p></div>
+            <div class="book-connection">Connected note: <a href="#note-title" data-open-note="tools">003 · Tools shape questions</a></div>
+          </div>
+        </article>
+        <article class="book-note" id="book-04">
+          <div class="book-no">Book 04</div>
+          <div class="book-title"><h3>Tao Te Ching</h3><p>Laozi · philosophy</p></div>
+          <div class="book-body">
+            <div><h4>Distilled argument</h4><p>Force often defeats itself; restraint, adaptability, and non-grasping can create a more durable kind of power.</p></div>
+            <div><h4>What to keep</h4><p>Enough is not a number discovered at the end of striving. It is a boundary chosen before striving becomes endless.</p></div>
+            <div class="book-connection">Connected note: <a href="#note-title" data-open-note="enough">004 · Define enough</a></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="themes-title">
+      <div class="section-head">
+        <div class="section-no">04 / Index</div>
+        <h2 id="themes-title">Four shelves, one connected body of thought.</h2>
+      </div>
+      <div class="theme-list">
+        <article class="theme"><div class="theme-num">01</div><h3>Books &amp; ideas</h3><p>Arguments worth keeping, passages worth questioning, and notes that outlive the book.</p></article>
+        <article class="theme"><div class="theme-num">02</div><h3>Markets &amp; judgment</h3><p>Decision principles, forecasts, and honest reviews of what the original reasoning missed.</p></article>
+        <article class="theme"><div class="theme-num">03</div><h3>Technology &amp; change</h3><p>New capabilities, second-order effects, and the human habits altered along the way.</p></article>
+        <article class="theme"><div class="theme-num">04</div><h3>Life &amp; community</h3><p>Questions of attention, family, responsibility, and what makes a life feel well used.</p></article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="capture-title">
+      <div class="section-head">
+        <div class="section-no">05 / Capture</div>
+        <h2 id="capture-title">Make the next page yours.</h2>
+      </div>
+      <div class="capture-shell">
+        <div class="capture-intro">
+          <strong>One book. One durable idea.</strong>
+          <p>Capture the argument in your own words, then name the note it belongs beside. It appears on this shelf for the session and downloads as a Markdown file you can keep or publish.</p>
+        </div>
+        <form class="capture-form" id="capture-form">
+          <div class="field"><label for="book-title-input">Book title</label><input id="book-title-input" name="title" autocomplete="off" required></div>
+          <div class="field"><label for="book-author-input">Author</label><input id="book-author-input" name="author" autocomplete="off" required></div>
+          <div class="field-wide"><label for="book-idea-input">Distilled idea</label><textarea id="book-idea-input" name="idea" required></textarea></div>
+          <div class="field-wide"><label for="book-connect-input">Connects to</label><input id="book-connect-input" name="connection" autocomplete="off" placeholder="A question, theme, or earlier note"></div>
+          <div class="capture-actions">
+            <button type="submit">Add note + download</button>
+            <button class="secondary" type="button" id="export-library">Export collection</button>
+            <label class="import-label" for="import-library">Import collection<input id="import-library" type="file" accept="application/json,.json"></label>
+            <p class="capture-status" id="capture-status" aria-live="polite">New entries remain visible for this session. Export the collection to restore them later.</p>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <footer class="disclosure">
+      <div class="section-no">Return ritual</div>
+      <p><strong>Once a week, revisit one old note before adding a new one.</strong> Mark what still feels true, what now feels incomplete, and which other idea it should sit beside. The book grows by connection, not accumulation.</p>
     </footer>
+  </main>
 
-    <!-- Main Logic Script -->
-    <script src="js/main.js"></script>
+  <script>
+    const notes = {
+      attention: {
+        kicker: 'Entry 001 · Attention',
+        quote: 'What we return to becomes easier to notice; what we notice becomes easier to understand.',
+        copy: 'Attention behaves like a quiet form of capital. Repeated contact builds context, and context lets subtle patterns become visible. The practical question is not only what deserves focus today, but what deserves repeated focus over years.',
+        prompt: 'Choose one subject you want to understand in five years. Give it one undistracted hour each week.',
+        tags: ['long-term thinking', 'practice'], source: 'Meditations', sourceId: 'book-01'
+      },
+      judgment: {
+        kicker: 'Entry 002 · Judgment',
+        quote: 'A good outcome can follow a bad decision, and a bad outcome can follow a sound one.',
+        copy: 'Luck and judgment are tangled in every uncertain choice. Reviewing only the result rewards confidence after the fact. A decision journal preserves the information, assumptions, and alternatives that existed when the choice was actually made.',
+        prompt: 'Before the next consequential choice, write what you expect, why, and what evidence would change your mind.',
+        tags: ['markets', 'decision journal'], source: 'The Psychology of Money', sourceId: 'book-02'
+      },
+      tools: {
+        kicker: 'Entry 003 · Technology',
+        quote: 'Every tool extends a capacity—and quietly reorganizes the questions we think to ask.',
+        copy: 'A new tool does more than speed up an old task. It changes what feels cheap, what becomes abundant, and where judgment moves next. The useful comparison is not human versus tool, but the old workflow versus the new system of habits.',
+        prompt: 'Name one task a tool made easier. Then ask which human skill became more important because of that change.',
+        tags: ['technology', 'second-order effects'], source: 'The Beginning of Infinity', sourceId: 'book-03'
+      },
+      enough: {
+        kicker: 'Entry 004 · Life',
+        quote: 'Without a definition of enough, every gain becomes merely the new starting point.',
+        copy: 'Ambition can organize a life, but an undefined finish line can consume it. “Enough” is not withdrawal; it is a boundary that lets achievement serve a chosen life rather than endlessly postpone it.',
+        prompt: 'Define enough for one dimension of life—money, work, possessions, or status—in terms you could recognize.',
+        tags: ['philosophy', 'life design'], source: 'Tao Te Ching', sourceId: 'book-04'
+      }
+    };
+    const buttons = [...document.querySelectorAll('[data-note]')];
+    const kicker = document.getElementById('note-kicker');
+    const quote = document.getElementById('note-quote');
+    const copy = document.getElementById('note-copy');
+    const prompt = document.getElementById('note-prompt');
+    const meta = document.getElementById('note-meta');
+    const source = document.getElementById('note-source');
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        buttons.forEach((item) => item.setAttribute('aria-selected', 'false'));
+        button.setAttribute('aria-selected', 'true');
+        const note = notes[button.dataset.note];
+        kicker.textContent = note.kicker;
+        quote.textContent = note.quote;
+        copy.textContent = note.copy;
+        prompt.innerHTML = '<strong>Try:</strong> ' + note.prompt;
+        source.textContent = note.source;
+        source.href = '#' + note.sourceId;
+        meta.replaceChildren(...note.tags.map((tag) => {
+          const item = document.createElement('span');
+          item.textContent = tag;
+          return item;
+        }));
+      });
+      button.addEventListener('keydown', (event) => {
+        if (!['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft'].includes(event.key)) return;
+        event.preventDefault();
+        const delta = ['ArrowDown', 'ArrowRight'].includes(event.key) ? 1 : -1;
+        const index = (buttons.indexOf(button) + delta + buttons.length) % buttons.length;
+        buttons[index].focus();
+        buttons[index].click();
+      });
+    });
+
+    document.querySelectorAll('[data-open-note]').forEach((link) => {
+      link.addEventListener('click', () => {
+        const button = buttons.find((item) => item.dataset.note === link.dataset.openNote);
+        if (button) button.click();
+      });
+    });
+
+    const captureForm = document.getElementById('capture-form');
+    const captureStatus = document.getElementById('capture-status');
+    const importLibrary = document.getElementById('import-library');
+    const exportLibrary = document.getElementById('export-library');
+    const customEntries = [];
+
+    const downloadFile = (contents, type, filename) => {
+      const blob = new Blob([contents], { type });
+      const url = URL.createObjectURL(blob);
+      const download = document.createElement('a');
+      download.href = url;
+      download.download = filename;
+      document.body.appendChild(download);
+      download.click();
+      download.remove();
+      URL.revokeObjectURL(url);
+    };
+
+    const renderEntry = (saved) => {
+      const entry = document.createElement('article');
+      entry.className = 'book-note personal-note';
+      entry.id = 'book-new-' + saved.id;
+      const number = document.createElement('div');
+      number.className = 'book-no';
+      number.textContent = 'Personal note';
+      const heading = document.createElement('div');
+      heading.className = 'book-title';
+      const headingTitle = document.createElement('h3');
+      headingTitle.textContent = saved.title;
+      const headingMeta = document.createElement('p');
+      headingMeta.textContent = saved.author + ' · personal entry';
+      heading.append(headingTitle, headingMeta);
+      const body = document.createElement('div');
+      body.className = 'book-body';
+      const ideaBlock = document.createElement('div');
+      const ideaLabel = document.createElement('h4');
+      ideaLabel.textContent = 'Distilled argument';
+      const ideaCopy = document.createElement('p');
+      ideaCopy.textContent = saved.idea;
+      ideaBlock.append(ideaLabel, ideaCopy);
+      const connectionBlock = document.createElement('div');
+      const connectionLabel = document.createElement('h4');
+      connectionLabel.textContent = 'Connects to';
+      const connectionCopy = document.createElement('p');
+      connectionCopy.textContent = saved.connection || 'No connection named yet.';
+      connectionBlock.append(connectionLabel, connectionCopy);
+      body.append(ideaBlock, connectionBlock);
+      entry.append(number, heading, body);
+      document.querySelector('.book-list').appendChild(entry);
+      return entry;
+    };
+
+    captureForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const data = new FormData(captureForm);
+      const saved = {
+        id: Date.now(),
+        title: String(data.get('title')).trim(),
+        author: String(data.get('author')).trim(),
+        idea: String(data.get('idea')).trim(),
+        connection: String(data.get('connection')).trim()
+      };
+      customEntries.push(saved);
+      const entry = renderEntry(saved);
+      const lines = ['# ' + saved.title, '', '**Author:** ' + saved.author, '', '## Distilled idea', '', saved.idea];
+      if (saved.connection) lines.push('', '## Connects to', '', saved.connection);
+      lines.push('', '## Questions to return to', '', '- What evidence would change this idea?', '- Where does it connect to something I already know?', '- What action follows from it?');
+      const filename = saved.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'commonplace-note';
+      downloadFile(lines.join('\n'), 'text/markdown;charset=utf-8', filename + '.md');
+      captureStatus.textContent = 'Added “' + saved.title + '” to this session and downloaded the Markdown file.';
+      entry.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      captureForm.reset();
+    });
+
+    exportLibrary.addEventListener('click', () => {
+      if (!customEntries.length) {
+        captureStatus.textContent = 'Add a personal entry before exporting the collection.';
+        return;
+      }
+      downloadFile(JSON.stringify({ version: 1, entries: customEntries }, null, 2), 'application/json;charset=utf-8', 'the-long-view-collection.json');
+      captureStatus.textContent = 'Collection exported. Import this file later to restore your entries.';
+    });
+
+    importLibrary.addEventListener('change', () => {
+      const file = importLibrary.files && importLibrary.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.addEventListener('load', () => {
+        try {
+          const parsed = JSON.parse(String(reader.result));
+          if (!parsed || parsed.version !== 1 || !Array.isArray(parsed.entries)) throw new Error('invalid');
+          document.querySelectorAll('.personal-note').forEach((item) => item.remove());
+          customEntries.length = 0;
+          parsed.entries.forEach((item, index) => {
+            if (!item || typeof item.title !== 'string' || typeof item.author !== 'string' || typeof item.idea !== 'string') return;
+            const saved = {
+              id: String(item.id || Date.now()) + '-' + index,
+              title: item.title.trim(),
+              author: item.author.trim(),
+              idea: item.idea.trim(),
+              connection: typeof item.connection === 'string' ? item.connection.trim() : ''
+            };
+            if (!saved.title || !saved.author || !saved.idea) return;
+            customEntries.push(saved);
+            renderEntry(saved);
+          });
+          captureStatus.textContent = customEntries.length + (customEntries.length === 1 ? ' entry restored.' : ' entries restored.');
+        } catch (error) {
+          captureStatus.textContent = 'That file is not a valid Long View collection.';
+        }
+        importLibrary.value = '';
+      });
+      reader.readAsText(file);
+    });
+  </script>
 </body>
 </html>
