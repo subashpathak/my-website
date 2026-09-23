@@ -41,6 +41,14 @@
     font-size:0.75rem; text-transform:uppercase; letter-spacing:0.14em;
     color:var(--muted); margin-bottom:8px;
   }
+  .entry h3 a{ color:inherit; text-decoration:none; }
+  .entry h3 a:hover{ text-decoration:underline; }
+  .back-link{
+    display:inline-block; margin-bottom:36px;
+    font-family:-apple-system,'Helvetica Neue',Arial,sans-serif; font-size:0.9rem;
+    color:var(--muted); text-decoration:none;
+  }
+  .back-link:hover{ color:var(--ink); }
   .meta{
     font-size:0.85rem; color:var(--muted); margin-bottom:16px;
     font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;
@@ -164,13 +172,6 @@
 [
   {
     "title": "Walden",
-    "author": "",
-    "idea": "You need more devotion than the time of the day offers to you to get more out of the day.",
-    "notes": "",
-    "date": "2026-09-23"
-  },
-  {
-    "title": "Walden",
     "author": "David Henry Thoreau",
     "idea": "\"The shore was irregular enough not to be monotonous.\" This sentence has stuck with me after almost finishing Walden. I am in the last 20 pages of the book. This immediately reminded me of Taleb saying \" The best way to verify that you are alive is by checking if you like variations.\" How do you like your variations in life. Thoreau is out there to experience in the woods by the Walden ponds. While he was cutting trees and building a hut for himself he was also pondering on what it means to live free. What it means to act free. What is moral. What is essential. What is living itself. He was close to the natural world. He was close to his inner world. \n\n\"Masses of men lead life of quiet desperation.\" What a thought. It is just as real as was 150 years ago. People are desperate and hasty. They make bad decisions on desperation. They forget you can witness heaven above your head and below your feet. They don't have to get stuck in this perpetual hustle and bustle of materialism. Alas desperate times need desperate measures. Thoreau reminds me not to make decision when you are desperate. It clogs the reality right in front of you. A finite life goes wasted under desperation only to regret later.",
     "notes": "",
@@ -201,30 +202,50 @@
     } catch(e){ return []; }
   }
   var liveEntries = getEntries();
+  function postAnchor(idx){
+    return "post-" + String(liveEntries.length - idx).padStart(2, "0");
+  }
+  function singlePostIndex(){
+    var m = /^#post-(\d+)$/.exec(location.hash || "");
+    if(!m) return -1;
+    var idx = liveEntries.length - parseInt(m[1], 10);
+    return (idx >= 0 && idx < liveEntries.length) ? idx : -1;
+  }
+  function entryHtml(e, idx){
+    return '<article class="entry">' +
+      '<div class="num">Post #' + String(liveEntries.length - idx).padStart(2, "0") + '</div>' +
+      '<h3><a href="#' + postAnchor(idx) + '">' + esc(e.title) + '</a></h3>' +
+      '<div class="meta">' + esc(e.author || "Unknown author") +
+        (e.date ? " &middot; " + esc(e.date) : "") +
+        '<button class="edit-btn" data-idx="' + idx + '" type="button">Edit</button></div>' +
+      '<p class="idea">' + esc(e.idea) + '</p>' +
+      (e.notes ? '<div class="notes">' + esc(e.notes) + '</div>' : '') +
+    '</article>';
+  }
   function render(){
     var log = document.getElementById("log");
     if(!liveEntries.length){
       log.innerHTML = '<div class="empty">Nothing here yet.<br>The first book is waiting.</div>';
+      document.title = "One Book, One Idea";
       return;
     }
-    log.innerHTML = liveEntries.map(function(e, idx){
-      return '<article class="entry">' +
-        '<div class="num">Post #' + String(liveEntries.length - idx).padStart(2, "0") + '</div>' +
-        '<h3>' + esc(e.title) + '</h3>' +
-        '<div class="meta">' + esc(e.author || "Unknown author") +
-          (e.date ? " &middot; " + esc(e.date) : "") +
-          '<button class="edit-btn" data-idx="' + idx + '" type="button">Edit</button></div>' +
-        '<p class="idea">' + esc(e.idea) + '</p>' +
-        (e.notes ? '<div class="notes">' + esc(e.notes) + '</div>' : '') +
-      '</article>';
-    }).join("");
+    var single = singlePostIndex();
+    if(single >= 0){
+      log.innerHTML = '<a class="back-link" href="#">&larr; All posts</a>' + entryHtml(liveEntries[single], single);
+      document.title = liveEntries[single].title + " \u2014 One Book, One Idea";
+    } else {
+      log.innerHTML = liveEntries.map(function(e, idx){ return entryHtml(e, idx); }).join("");
+      document.title = "One Book, One Idea";
+    }
     var btns = log.querySelectorAll(".edit-btn");
     for(var i = 0; i < btns.length; i++){
       btns[i].addEventListener("click", function(){
         openEditorForEdit(parseInt(this.getAttribute("data-idx"), 10));
       });
     }
+    window.scrollTo(0, 0);
   }
+  window.addEventListener("hashchange", render);
 
   /* ---------- editor ---------- */
   var overlay = document.getElementById("editorOverlay");
