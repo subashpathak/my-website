@@ -25,11 +25,6 @@
     padding:10px 22px;
   }
   .write-btn:hover{ opacity:0.85; }
-  .how{
-    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
-    padding:20px 0; margin-bottom:56px; font-size:0.95rem; color:var(--muted);
-  }
-  .how strong{ color:var(--ink); }
   h2.section{
     font-size:0.8rem; text-transform:uppercase; letter-spacing:0.14em;
     color:var(--muted); font-weight:400; margin:0 0 24px;
@@ -121,13 +116,6 @@
       <button id="writeBtn" class="write-btn" type="button">Write</button>
     </div>
 
-    <div class="how">
-      <strong>How this works:</strong> this is a personal reading log.
-      Hit <strong>Write</strong>, type the book and the one idea worth keeping,
-      and <strong>Publish</strong> &mdash; it goes live on this site right away.
-      You can edit any entry later with its <strong>Edit</strong> button.
-    </div>
-
     <h2 class="section">The log</h2>
     <div id="log"></div>
 
@@ -206,14 +194,14 @@
       return Array.isArray(arr) ? arr : [];
     } catch(e){ return []; }
   }
+  var liveEntries = getEntries();
   function render(){
     var log = document.getElementById("log");
-    var entries = getEntries();
-    if(!entries.length){
+    if(!liveEntries.length){
       log.innerHTML = '<div class="empty">Nothing here yet.<br>The first book is waiting.</div>';
       return;
     }
-    log.innerHTML = entries.map(function(e, idx){
+    log.innerHTML = liveEntries.map(function(e, idx){
       return '<article class="entry">' +
         '<h3>' + esc(e.title) + '</h3>' +
         '<div class="meta">' + esc(e.author || "Unknown author") +
@@ -255,7 +243,7 @@
     overlay.hidden = false;
   }
   function openEditorForEdit(idx){
-    var e = getEntries()[idx];
+    var e = liveEntries[idx];
     if(!e) return;
     editingIndex = idx;
     document.getElementById("fTitle").value = e.title || "";
@@ -374,9 +362,15 @@
         return r.json();
       })
       .then(function(){
-        setStatus(isEdit
-          ? "Saved \u2014 the updated entry goes live in about a minute. Reload then to see it."
-          : "Published \u2014 it goes live on the site in about a minute. Reload then to see it.", "ok");
+        if(isEdit){
+          entry.date = liveEntries[editingIndex].date || entry.date;
+          liveEntries[editingIndex] = entry;
+        } else {
+          liveEntries.unshift(entry);
+        }
+        render();
+        overlay.hidden = true;
+        editingIndex = -1;
         clearForm();
         publishBtn.disabled = false;
       })
