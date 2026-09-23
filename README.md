@@ -1,21 +1,17 @@
-# AI Solutions | AI Engineering for Small Business
+# my-website
 
-Professional landing page and AI assistant for custom business automation and strategy.
+**The Long View** — a personal commonplace book: a living index of ideas worth
+returning to, distilled from reading and connected across philosophy, markets,
+technology, and life.
 
-## Tech Stack
-- **HTML5/Tailwind CSS**: Modern, responsive UI with "Glass Box" aesthetic.
-- **JavaScript**: Smooth interactions and lead capture.
-- **AI Integration**: Custom chatbot interface ready for API connection.
+## Files
 
-## Services
-- AI Strategy & Audits
-- Custom Customer Support Bots
-- Process & Workflow Automation
-- Data Intelligence & Forecasting
+- `index.html` — the entire site in one self-contained file. Open it in any
+  browser; no build step, no server needed.
 
-## Rate
-- **$175/hour** (Standard Engineering Rate)
+## Notes
 
-## Deployment
-- Hosted on GitHub Pages (recommended)
-- Push to `main` to trigger CI/CD.
+- The starter book pages and idea notes are samples. Replace them with real
+  entries via the capture form on the page (each entry downloads as Markdown).
+- Personal entries added in the browser live for the session only; use
+  "Export collection" on the page to keep them.
